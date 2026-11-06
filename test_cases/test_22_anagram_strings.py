@@ -1,22 +1,27 @@
-def is_anagram(first, second):
-    first = first.replace(" ", "").lower()
-    second = second.replace(" ", "").lower()
+import importlib.util
+from pathlib import Path
 
-    if len(first) != len(second):
-        return False
-
-    for char in first:
-        if first.count(char) != second.count(char):
-            return False
-
-    return True
+p = Path(__file__).parent.parent / "codes" / "22_anagram_strings.py"
+spec = importlib.util.spec_from_file_location("program", p)
+m = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(m)
 
 
-if __name__ == "__main__":
-    first = input("Enter first string: ")
-    second = input("Enter second string: ")
+def test_anagram():
+    assert m.is_anagram("listen", "silent") == True
 
-    if is_anagram(first, second):
-        print("Strings are Anagrams")
-    else:
-        print("Strings are not Anagrams")
+
+def test_not_anagram():
+    assert m.is_anagram("hello", "world") == False
+
+
+def test_uppercase():
+    assert m.is_anagram("Listen", "Silent") == True
+
+
+def test_spaces():
+    assert m.is_anagram("dormitory", "dirty room") == True
+
+
+def test_empty():
+    assert m.is_anagram("", "") == True
